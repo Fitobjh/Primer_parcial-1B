@@ -156,17 +156,13 @@ def jugar_batalla(lista):
 #Goten - 3000 - Kamehameha + Tambor del trueno
 #Goku - 5000000 - Kamehameha + Super Saiyan 2
 def guardar_json(lista_personajes)->str:
-    # Solicitar raza y habilidad al usuario
     raza = input("Ingrese la raza deseada: ")
     habilidad_eliminar = input("Ingrese la habilidad deseada: ")
     
-    # Filtrar los personajes que cumplen con los criterios de búsqueda
     personajes_filtrados = []
     for personaje in lista_personajes:
         if raza in personaje['raza'] and habilidad_eliminar in personaje['habilidades']:
             personajes_filtrados.append(personaje)
-    
-    # Crear diccionario con los datos de los personajes filtrados
     datos_personajes = {}
     for personaje in personajes_filtrados:
         nombre = personaje['nombre']
@@ -174,10 +170,8 @@ def guardar_json(lista_personajes)->str:
         otras_habilidades = [habilidad.strip() for habilidad in personaje['habilidades'].replace('$%', '').split("|") if habilidad.strip() != habilidad_eliminar]
         datos_personajes[nombre] = {'poder_ataque': poder_ataque, 'otras_habilidades': otras_habilidades}
     
-    # Crear nombre de archivo
     nombre_archivo = f"{raza}_{habilidad_eliminar}.json"
     
-    # Guardar datos en archivo json
     with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
         json.dump(datos_personajes, archivo, indent=4, ensure_ascii=False )
     
