@@ -3,7 +3,7 @@ import re
 import random
 import datetime
 '''
-                                                    COSAS PARA OPTIMIZAR MI MENU:
+COSAS PARA OPTIMIZAR MI MENU:
 '''
 def mostrar_menu(menu:list)->None:
     for opcion in menu:
@@ -16,9 +16,8 @@ def mostrar_datos(cualquier_dato)->None: #La uso solo cuando retornan algo sino 
 
 def ingresar_salir(accion:str)->None:
     print(f"-----------------------{accion}-----------------------")
-
 '''
-                                                    CALCULOS REUTILIZABLES:
+CALCULOS REUTILIZABLES:
 '''
 def calcular_contador(lista: list, clave=None, valor=None)->int:
     if(type(lista) == list and len(lista) > 0 and type(clave) == str and len(clave) > 0):
@@ -44,12 +43,17 @@ def calcular_contador_raza(lista:list, clave:str)->list:
     return resultados
 
 '''
-                                                    ACTIVIDADES RESUELTAS:
+ACTIVIDADES RESUELTAS:
 '''
 #1. Traer datos desde archivo: guardará el contenido del archivo DBZ.csv en una colección. Tener en
 #cuenta que tanto razas y habilidades deben estar guardadas en algún tipo de colección debido a que
 #un personaje puede tener más de una raza y más de una habilidad.
-def parser_csv(path:str):
+def parser_csv(path:str)->list:
+    '''
+    -Indicar que hace: Guarda datos de archivo en una coleccion
+    -Que parámetros acepta: 1 string
+    -Que devuelve: 1 lista
+    '''
     lista_DBZ = []
     archivo = open(path, 'r', encoding="UTF-8")
     for line in archivo:
@@ -66,7 +70,12 @@ def parser_csv(path:str):
 
 #2. Listar cantidad por raza: mostrará todas las razas indicando la cantidad de personajes que
 #corresponden a esa raza.
-def mostrar_contador_raza(lista:list, clave:str):
+def mostrar_contador_raza(lista:list, clave:str)->None:
+    '''
+    -Indicar que hace: Muestra la cantidad por raza
+    -Que parámetros acepta: 1 lista y 1 string
+    -Que devuelve: Nada
+    '''
     resultados = calcular_contador_raza(lista, clave)
     for tipo, contador in resultados:
         print(f"➣ Cantidad de héroes de DBZ de raza {tipo}: {contador}")
@@ -74,16 +83,19 @@ def mostrar_contador_raza(lista:list, clave:str):
 #3. Listar personajes por raza: mostrará cada raza indicando el nombre y poder de ataque de cada
 #personaje que corresponde a esa raza. Dado que hay personajes que son cruza, los mismos podrán
 #repetirse en los distintos listados.
-
-def tiene_raza(personaje, raza):
+def tiene_raza(personaje:str, raza:str)->str:
+    '''
+    -Indicar que hace: Raza a buscar en lista de razas
+    -Que parámetros acepta: 2 strings
+    -Que devuelve: 1 string
+    '''
     return raza in personaje['raza']
-
-def mostrar_heroes(lista:list,clave:str,valor:str)->None:
-    for heroe in lista:
-        if heroe[clave] == valor:
-            print(f"  Personaje: {heroe['nombre']} - Poder: {heroe['poder_de_ataque']}")
-
-def mostrar_heroes_raza(lista:list):
+def mostrar_heroes_raza(lista:list)->None:
+    '''
+    -Indicar que hace: Muestra Heroes en ambos lados si poseen mas de una raza
+    -Que parámetros acepta: 1 string
+    -Que devuelve: Nada
+    '''
     unico = list(set([heroe['raza'] for heroe in lista]))
     for i in unico:
         print(f"➣ Los heroes que tienen raza {i} son: ")
@@ -93,8 +105,13 @@ def mostrar_heroes_raza(lista:list):
 
 #4. Listar personajes por habilidad: el usuario ingresa la descripción de una habilidad y el programa
 #deberá mostrar nombre, raza y promedio de poder entre ataque y defensa.               
-def mostrar_personajes_por_habilidad(lista):
-    habilidad = input("Ingrese la habilidad deseada: ")
+def mostrar_personajes_por_habilidad(lista:list)->None:
+    '''
+    -Indicar que hace: Mostrar nombre, raza y promedio segun la habilidad que ingrese
+    -Que parámetros acepta: 1 lista 
+    -Que devuelve: Nada
+    '''
+    habilidad = input("\n➣ Ingrese la habilidad deseada: ")
     personajes_con_habilidad = []
     for personaje in lista:
         habilidades = personaje['habilidades'].replace("$%","").split("|")
@@ -111,15 +128,17 @@ def mostrar_personajes_por_habilidad(lista):
             promedio = (ataque + pelea) / 2
             print(f"Nombre: {personaje['nombre']}, Raza: {personaje['raza']}, Promedio de poder: {promedio}")
 
-
-
 #5. Jugar batalla: El usuario seleccionará un personaje. La máquina selecciona otro al azar. Gana la
 #batalla el personaje que más poder de ataque tenga. El personaje que gana la batalla se deberá
 #guardar en un archivo de texto, incluyendo la fecha de la batalla, el nombre del personaje que ganó y
 #el nombre del perdedor. Este archivo anexará cada dato.
-
-def jugar_batalla(lista):
-    nombre_personaje = input("\nSelecciona un personaje para jugar: ")
+def jugar_batalla(lista:list)->None:
+    '''
+    -Indicar que hace: Anexar archivo segun resultado de batalla
+    -Que parámetros acepta: 1 lista
+    -Que devuelve: Nada
+    '''
+    nombre_personaje = input("\n➣ Selecciona un personaje para jugar: ")
     personaje_usuario = None
     for personaje in lista:
         if personaje['nombre'] == nombre_personaje:
@@ -155,9 +174,30 @@ def jugar_batalla(lista):
 #Datos :
 #Goten - 3000 - Kamehameha + Tambor del trueno
 #Goku - 5000000 - Kamehameha + Super Saiyan 2
-def guardar_json(lista_personajes)->str:
-    raza = input("Ingrese la raza deseada: ")
-    habilidad_eliminar = input("Ingrese la habilidad deseada: ")
+def leer_json(nombre_archivo:str)->None:
+    '''
+    -Indicar que hace: Muestra los datos segun un formato especifico
+    -Que parámetros acepta: 1 string
+    -Que devuelve: Nada
+    '''
+    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
+        datos_personajes = json.load(archivo)
+    
+    print("Personajes encontrados:")
+    for nombre, datos in datos_personajes.items():
+        poder_ataque = datos['poder_ataque']
+        otras_habilidades = " + ".join(datos['otras_habilidades'])
+        print(f"{nombre} - {poder_ataque} - {otras_habilidades}")
+        
+#7. Leer Json: permitirá mostrar un listado con los personajes guardados en el archivo Json de la opción 6.
+def guardar_json(lista_personajes:list)->str:
+    '''
+    -Indicar que hace: Generar un listado, se guardarán en un archivo Json
+    -Que parámetros acepta: 1 lista
+    -Que devuelve: 1 string
+    '''
+    raza = input("\n➣ Ingrese la raza deseada: ")
+    habilidad_eliminar = input("➣ Ingrese la habilidad deseada: ")
     
     personajes_filtrados = []
     for personaje in lista_personajes:
@@ -174,17 +214,8 @@ def guardar_json(lista_personajes)->str:
     
     with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
         json.dump(datos_personajes, archivo, indent=4, ensure_ascii=False )
-    
+        
     print(f"Archivo guardado con el nombre {nombre_archivo}")
     return nombre_archivo
 
-#7. Leer Json: permitirá mostrar un listado con los personajes guardados en el archivo Json de la opción 6.
-def leer_json(nombre_archivo):
-    with open(nombre_archivo, 'r', encoding='utf-8') as archivo:
-        datos_personajes = json.load(archivo)
-    
-    print("Personajes encontrados:")
-    for nombre, datos in datos_personajes.items():
-        poder_ataque = datos['poder_ataque']
-        otras_habilidades = " + ".join(datos['otras_habilidades'])
-        print(f"{nombre} - {poder_ataque} - {otras_habilidades}")
+

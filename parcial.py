@@ -1,9 +1,10 @@
-import json
 '''
 Adolfo Pumacayo 1B Primer Parcial
 '''
+import json
 from funciones_primer_parcial import * 
 from os import system
+
 ingresar_salir("MENU")
 menu = ["1-Traer datos desde archivo",
         "2-Listar cantidad por raza",
@@ -36,16 +37,14 @@ while seguir == True:
         case 5:
             lista = parser_csv('DBZ.csv')
             jugar_batalla(lista)
-            
         case 6:
-            lista = parser_csv('DBZ.csv')
-            guardar_json(lista)
-        case 7:
             lista = parser_csv('DBZ.csv')
             nombre_archivo = guardar_json(lista)
             leer_json(nombre_archivo)
+        case 7:
+            lista = parser_csv('DBZ.csv')
+            guardar_json(lista)
         case 8:
             ingresar_salir("Saliste")
             seguir = False
-            
     input("\nEnter para continuar\n")
